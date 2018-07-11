@@ -11,7 +11,7 @@ exports.System = {
 }
 
 exports.DB = {
-  url: 'mongodb://localhost/defaultDbForLw'
+  url: 'mongodb://localhost/speakingMaster'
 }
 
 exports.SendEmail = {

@@ -12,7 +12,6 @@ const ErrorRoutesCatch = require('./middleware/ErrorRoutesCatch')
 const customizedLogger = require('./tool/customized-winston-logger')
 require('./mongodb/db') // 直接连接数据库，不需要使用db
 
-
 global.logger = customizedLogger
 
 const app = new Koa2()

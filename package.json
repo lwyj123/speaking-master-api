@@ -1,11 +1,8 @@
 {
-  "name": "lwio-api",
+  "name": "speaking-master-api",
   "version": "1.0.0",
-  "description": "Koa2 RESTful API 服务器的脚手架",
+  "description": "Koa2 server for speaking-master",
   "author": "lwio <443474713@qq.com>",
-  "contributors": [
-    "lvfei <1972952841@qq.com>"
-  ],
   "scripts": {
     "start": "gulp nodemon",
     "dev": "gulp",
