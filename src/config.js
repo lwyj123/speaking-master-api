@@ -11,7 +11,22 @@ exports.System = {
 }
 
 exports.DB = {
-  url: 'mongodb://localhost/speakingMaster'
+  url: 'mongodb://localhost/speaking-master'
+}
+
+exports.OAUTH_LWIO = {
+  oauthClientInfo: {
+    id: 'sample_app',
+    clientSecret: 'this_is_the_client_secret',
+    name: 'Sample App',
+    scope: 'user_info:read',
+    responseType: 'code',
+    grantType: 'authorization_code',
+    redirectUri: 'http://localhost:9528/receive-grant'
+  },
+  api: {
+    getUserInfo: 'http://localhost:29305/api/users'
+  }
 }
 
 exports.SendEmail = {

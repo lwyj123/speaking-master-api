@@ -1,10 +1,8 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const bcrypt = require('bcrypt')
-
 const UserSchema = new Schema({
-  name: { // 显示名称，昵称
+  lwio_id: {
     type: String,
     unique: true,
     required: true
@@ -14,12 +12,10 @@ const UserSchema = new Schema({
     unique: true,
     required: true
   },
-  password: { // 密码
+  nickname: { // 显示名称，昵称
     type: String,
+    unique: true,
     required: true
-  },
-  person_id: { // 用户唯一角色的id
-    type: String
   },
   meta: { // meta信息
     age: {
@@ -40,34 +36,14 @@ UserSchema.set('toObject', {
   }
 })
 
-// 添加用户保存时中间件对password进行bcrypt加密,这样保证用户密码只有用户本人知道
-UserSchema.pre('save', function (next) {
-  var user = this
-  if (this.isModified('password') || this.isNew) {
-    bcrypt.genSalt(10, function (err, salt) {
-      if (err) {
-        return next(err)
-      }
-      bcrypt.hash(user.password, salt, function (err, hash) {
-        if (err) {
-          return next(err)
-        }
-        user.password = hash
-        next()
-      })
-    })
-  } else {
-    return next()
-  }
-})
-// 校验用户输入密码是否正确
-UserSchema.methods.comparePassword = function (passw, cb) {
-  return new Promise((resolve, reject) => {
-    bcrypt.compare(passw, this.password, (err, isMatch) => {
-      cb(err || null, isMatch)
-      resolve()
-    })
-  })
+UserSchema.statics.upsertByLwioId = async function (lwioId, {username, nickname, meta}) {
+  await this.update({lwio_id: lwioId}, {
+    username,
+    nickname,
+    meta
+  }, {upsert: true, setDefaultsOnInsert: true})
+  const [userDoc] = await this.find({lwio_id: lwioId})
+  return userDoc
 }
 
 module.exports = mongoose.model('User', UserSchema)

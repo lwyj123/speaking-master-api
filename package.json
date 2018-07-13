@@ -23,6 +23,8 @@
     "koa-static": "^4.0.2",
     "mongoose": "^4.13.1",
     "nodemailer": "^4.3.0",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2",
     "require-directory": "^2.1.1",
     "stream-slice": "^0.1.2",
     "winston": "^2.4.0"
