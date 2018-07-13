@@ -15,8 +15,17 @@ const SubjectSchema = new Schema({
     type: Object,
     default: []
   },
+  creator_id: {
+    type: String
+  },
   paticipants: { // 提交人数
-    type: Number
+    type: Number,
+    default: 0
+  }
+}, {
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
   }
 })
 
@@ -27,5 +36,21 @@ SubjectSchema.set('toObject', {
     delete ret.__v
   }
 })
+
+SubjectSchema.statics.createSubject = async function ({name, content, tags = []}) {
+  const [subjectExist] = await this.find({$or: [
+    { name: name }
+  ]})
+  if (subjectExist && subjectExist.name === name) {
+    throw Error('duplicate subject name')
+  }
+  const subject = new this({
+    name,
+    content,
+    tags
+  })
+  const subjectDoc = await subject.save()
+  return subjectDoc
+}
 
 module.exports = mongoose.model('Subject', SubjectSchema)

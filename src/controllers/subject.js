@@ -43,16 +43,18 @@ class SubjectController extends BaseController {
   }
 
   async PostSubjects (ctx) {
+    const { ...params } = ctx.request.body
+    if (!params.name) {
+      throw Error('没有name参数')
+    }
+    if (!params.content) {
+      throw Error('没有content参数')
+    }
+    const newSubject = await SubjectModal.createSubject({
+      ...params
+    })
     ctx.body = {
-      id: 1,
-      name: 'Most attractive theme of children museum exhibition',
-      content: 'What the fuck is that you are a fucking doubi',
-      tags: [
-        'Toefl',
-        'one of three',
-        'task 1'
-      ],
-      paticipants: 12
+      ...newSubject.toObject()
     }
   }
 
@@ -75,49 +77,6 @@ class SubjectController extends BaseController {
       'test': 'wori'
     }
   }
-}
-
-const GetArticleById = async (ctx) => {
-  const articleId = ctx.params.id
-  console.log(articleId)
-
-  const articleDoc = await ArticleModal
-    .findByIdAndUpdate(articleId, { $inc: { read_count: 1 } })
-
-  ctx.body = {
-    ...articleDoc.toObject()
-  }
-}
-
-const PostArticle = async (ctx) => {
-  let data = ctx.request.body
-
-  if (!data.title || !data.content) {
-    ctx.body = {
-      err: 'require necessary filed'
-    }
-    ctx.response.status = 422
-    return
-  }
-  var articleModal = new ArticleModal({
-    title: data.title,
-    content: data.content
-  })
-  await articleModal.save(function (err, articleDoc) {
-    if (err) {
-      // throw new Error(err.toString())
-      ctx.body = {
-        err: err.errmsg
-      }
-      ctx.response.status = 422
-    } else {
-      ctx.body = {
-        ...articleDoc.toObject()
-      }
-    }
-  }).catch((err) => {
-    console.log(err.errmsg)
-  })
 }
 
 module.exports = new SubjectController()
